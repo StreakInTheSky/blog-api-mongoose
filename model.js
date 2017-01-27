@@ -4,8 +4,7 @@ const postSchema = mongoose.Schema({
 	title: {type: String, required: true},
 	author: {
 		firstName: {type: String},
-		lastName: {type: String},
-		required: true
+		lastName: {type: String}
 	},
 	content: {type: String, required: true}
 })
@@ -24,6 +23,6 @@ postSchema.methods.apiRepr = function() {
 	};
 }
 
-const blogPost = mongoose.model('Posts', postSchema);
+const Post = mongoose.model('Posts', postSchema);
 
-module.exports = {blogPost};
+module.exports = {Post};
