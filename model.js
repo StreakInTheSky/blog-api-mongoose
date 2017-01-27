@@ -10,7 +10,7 @@ const postSchema = mongoose.Schema({
 })
 
 postSchema.virtual('authorString').get(function() {
-	return `${this.author.firstName} ${this.author.LastName}`;
+	return `${this.author.firstName} ${this.author.lastName}`;
 });
 
 postSchema.methods.apiRepr = function() {

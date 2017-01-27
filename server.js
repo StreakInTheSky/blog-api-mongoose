@@ -23,8 +23,19 @@ app.get('/posts', (req, res) => {
     .catch(
       err => {
         console.error(err);
-        res.status(500).json({message: 'Internal server error'});
+        res.status(500).json({message: 'Internal server error'})
       });
+});
+
+app.get('/posts/:id', (req, res) => {
+  Post
+    .findById(req.params.id)
+    .exec()
+    .then(posts =>res.json(posts.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'})
+    });
 });
 
 
