@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 mongoose.Promise = global.Promise;
 
 const {PORT, DATABASE_URL} = require('./config');
-const {Post} = require('./model');
+const {BlogPost} = require('./model');
 
 const app = express();
 app.use(bodyParser.json());
 
 app.get('/posts', (req, res) => {
-  Post
+  BlogPost
     .find()
     .exec()
     .then(posts => {
@@ -28,7 +28,7 @@ app.get('/posts', (req, res) => {
 });
 
 app.get('/posts/:id', (req, res) => {
-  Post
+  BlogPost
     .findById(req.params.id)
     .exec()
     .then(posts => res.json(posts.apiRepr()))
@@ -48,7 +48,7 @@ app.post('/posts', (req, res) => {
     }
   })
 
-  Post
+  BlogPost
     .create({
       title: req.body.title,
       author: {
@@ -57,7 +57,7 @@ app.post('/posts', (req, res) => {
       },
       content: req.body.content})
     .then(
-      posts => res.status(201).json(posts.apiRepr()))
+      post => res.status(201).json(post.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
@@ -82,10 +82,10 @@ app.put('/posts/:id', (req, res) => {
     }
   })
 
-  Post
+  BlogPost
     .findByIdAndUpdate(req.params.id, {$set: toUpdate})
     .exec()
-    .then(posts => res.status(201).json(posts.apiRepr()))
+    .then(updatedPost => res.status(201).json(updatedPost.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'});
@@ -93,11 +93,10 @@ app.put('/posts/:id', (req, res) => {
 });
 
 app.delete('/posts/:id', (req, res) => {
-
-  Post
+  BlogPost
     .findByIdAndRemove(req.params.id)
     .exec()
-    .then(restaurant => res.status(204).end())
+    .then(() => {res.status(204).end()})
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
