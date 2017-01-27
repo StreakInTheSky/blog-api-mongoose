@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const postSchema = mongoose.Schema({
 	title: {type: String, required: true},
 	author: {
-		firstName: {type: String},
-		lastName: {type: String}
+		firstName: {type: String, required: true},
+		lastName: {type: String},
 	},
 	content: {type: String, required: true}
 })

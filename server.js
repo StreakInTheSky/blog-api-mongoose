@@ -31,10 +31,36 @@ app.get('/posts/:id', (req, res) => {
   Post
     .findById(req.params.id)
     .exec()
-    .then(posts =>res.json(posts.apiRepr()))
+    .then(posts => res.json(posts.apiRepr()))
     .catch(err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'})
+    });
+});
+
+app.post('/posts', (req, res) => {
+  const requiredFields = ['title', 'content', 'author'];
+  requiredFields.forEach(field => {
+    if(!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body.`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  })
+
+  Post
+    .create({
+      title: req.body.title,
+      author: {
+        firstName: req.body.author.firstName,
+        lastName: req.body.author.lastName
+      },
+      content: req.body.content})
+    .then(
+      posts => res.status(201).json(posts.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'});
     });
 });
 
